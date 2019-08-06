@@ -12,7 +12,9 @@ const cars = [
 
 const coll = new Enumerable(cars);
 
-const result = coll.orderBy(car => car.model, 'asc').toArray();
+// const result = coll.orderBy(car => car.model, 'asc').toArray();
+
+const result = coll.where(car => car.brand === 'kia').toArray();
 
 console.log(result);
 
