@@ -1,16 +1,19 @@
 class Enumerable {
-    constructor(collection) {
+    constructor(collection, operations) {
         this.collection = collection;
+        this.operations = operations || [];
+    }
+
+    build(fn) {
+        return new Enumerable(this.collection.slice(), this.operations.concat(fn));
     }
 
     where(fn) {
-        const filtered = this.collection.filter(fn);
-        return new Enumerable(filtered);
+        return this.build(coll => coll.filter(fn));
     }
 
     select(fn) {
-        const selected = this.collection.map(fn);
-        return new Enumerable(selected);
+        return this.build(coll => coll.map(fn));
     }
 
     orderBy(fn, direction = 'asc') {
@@ -28,13 +31,12 @@ class Enumerable {
 
             return 0;
         };
-        const ordered = this.collection.slice().sort(comparator);
-        return new Enumerable(ordered);
+        return this.build(coll => coll.sort(comparator));
     }
 
 
     toArray() {
-        return this.collection.slice();
+        return this.operations.reduce((acc, func) => func(acc), this.collection);
     }
 }
 
