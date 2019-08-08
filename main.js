@@ -1,7 +1,5 @@
 import Enumerable from './Enumerable.js';
 
-const myVar = new Enumerable();
-
 const cars = [
     { brand: 'bmw', model: 'm5', year: 2014 },
     { brand: 'bmw', model: 'm4', year: 2013 },
@@ -11,35 +9,14 @@ const cars = [
 ];
 
 const coll = new Enumerable(cars);
+coll.orderBy(car => car.year, 'asc').toArray();
+// const result = coll.where(car => car.brand === 'kia')
+//     .where(car => car.year > 2011);
 
-// const result = coll.orderBy(car => car.model, 'asc').toArray();
+const newColl = coll.where(car => car.brand === 'kia').select(car => car.model);
 
-// const result = coll.where(car => car.brand === 'kia').toArray();
+const result = newColl.toArray();
+result.pop();
 
-// const result = coll.select(car => car.model);
-
-const result = coll.where(car => car.brand === 'bmw')
-    .select(car => car.model).toArray();
-
-console.log(result);
-
-var items = [
-    { name: 'Edward', value: 21 },
-    { name: 'Sharpe', value: 37 },
-    { name: 'And', value: 45 },
-    { name: 'The', value: -12 },
-    { name: 'Magnetic' },
-    { name: 'Zeros', value: 37 }
-];
-items.sort(function (a, b) {
-    if (a.name > b.name) {
-        return 1;
-    }
-    if (a.name < b.name) {
-        return -1;
-    }
-    // a должно быть равным b
-    return 0;
-});
-
-// console.log(items);
+console.log(result.toArray());
+console.log(result.memo, 'memo1');

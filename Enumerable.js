@@ -36,7 +36,17 @@ class Enumerable {
 
 
     toArray() {
-        return this.operations.reduce((acc, func) => func(acc), this.collection);
+        // return this.operations.reduce((acc, func) => func(acc), this.collection);
+
+        if (!this.memo) {
+            this.memo = this.operations.reduce((acc, func) => func(acc), this.collection);
+        }
+
+        return this.memo.slice();
+    }
+
+    get length() {
+        return this.toArray().length;
     }
 }
 
