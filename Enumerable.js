@@ -4,12 +4,28 @@ class Enumerable {
         this.operations = operations || [];
     }
 
+
     build(fn) {
         return new Enumerable(this.collection.slice(), this.operations.concat(fn));
     }
 
-    where(fn) {
-        return this.build(coll => coll.filter(fn));
+
+    where(...args) {
+        let newOps = [];
+        newOps = args.reduce((acc, curr) => {
+            if (typeof curr === "function"){
+                return acc.concat(coll => coll.filter(curr));
+            }
+
+            if (typeof curr === "object"){
+                // { brand: 'kia', model: 'sorento' }
+                let newKeys = Object.keys(curr);
+                return acc.concat(coll => coll.filter(car => {
+                    return newKeys.every(c => car[c] == curr[c]);
+                }))
+            }
+        }, []);
+        return this.build(newOps);
     }
 
     select(fn) {
@@ -34,15 +50,17 @@ class Enumerable {
         return this.build(coll => coll.sort(comparator));
     }
 
-
-    toArray() {
-        // return this.operations.reduce((acc, func) => func(acc), this.collection);
-
+    getProcessedCollection() {
         if (!this.memo) {
             this.memo = this.operations.reduce((acc, func) => func(acc), this.collection);
         }
 
-        return this.memo.slice();
+        return this.memo;
+    }
+
+
+    toArray() {
+        return this.getProcessedCollection().slice();
     }
 
     get length() {

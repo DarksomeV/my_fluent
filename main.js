@@ -7,16 +7,41 @@ const cars = [
     { brand: 'kia', model: 'rio', year: 2010 },
     { brand: 'kia', model: 'sportage', year: 2012 },
 ];
-
 const coll = new Enumerable(cars);
-coll.orderBy(car => car.year, 'asc').toArray();
-// const result = coll.where(car => car.brand === 'kia')
-//     .where(car => car.year > 2011);
 
-const newColl = coll.where(car => car.brand === 'kia').select(car => car.model);
-
-const result = newColl.toArray();
-result.pop();
+const result = coll
+    .where(car => car.brand === 'kia', car => car.year > 2011);
 
 console.log(result.toArray());
-console.log(result.memo, 'memo1');
+
+// [
+//   { brand: 'kia', model: 'sorento', year: 2014 },
+//   { brand: 'kia', model: 'sportage', year: 2012 },
+// ]
+
+const result2 = coll.where({ brand: 'bmw' });
+console.log(result2.toArray());
+console.log(result2.operations);
+// [
+//   { brand: 'bmw', model: 'm5', year: 2014 },
+//   { brand: 'bmw', model: 'm4', year: 2013 },
+// ]
+
+// const result3 = coll.where({ brand: 'kia', model: 'sorento' });
+// result3.toArray();
+// [
+//   { brand: 'kia', model: 'sorento', year: 2014 },
+// ]
+
+// const result3 = coll.where({ brand: 'kia' }, {  model: 'sorento' });
+// result3.toArray();
+// [
+//   { brand: 'kia', model: 'sorento', year: 2014 },
+// ]
+
+// const result4 = coll.where({ brand: 'kia' }, car => car.year < 2013);
+// result4.toArray();
+// [
+//   { brand: 'kia', model: 'rio', year: 2010 },
+//   { brand: 'kia', model: 'sportage', year: 2012 },
+// ]
